@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Room
   - Door
+  - OptionsMainMenu
   layers:
   - Default
   - TransparentFX
