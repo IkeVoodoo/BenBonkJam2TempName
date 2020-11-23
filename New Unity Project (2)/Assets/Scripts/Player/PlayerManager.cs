@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
-    public PlayerData data;
+        public PlayerData data;
     public RoomGenerator gen;
 
     private float updateTimer = .5f;
