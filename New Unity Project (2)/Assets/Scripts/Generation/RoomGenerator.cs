@@ -1,70 +1,75 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RoomGenerator : MonoBehaviour
 {
+    // Player reference
     public Player player;
 
-    private CharacterController cc;
+    // name
+    public GameObject roomPrefab;
 
-    private void Start()
-    {
-        cc = player.GetComponent<CharacterController>();
-    }
+    // Character controller
+    public CharacterController cc;
+
 
     public GameObject genAtPos(float X, float Y)
     {
-        GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        roomPrefab = GameObject.FindWithTag("Room");
+        GameObject obj = Instantiate(roomPrefab, new Vector3(X * 10, 0f, Y * 10), Quaternion.identity);
         obj.SetActive(true);
         cc.enabled = false;
         player.transform.position = new Vector3(player.transform.position.x + (X * 10), 1, player.transform.position.y + (Y * 10));
         cc.enabled = true;
-        obj.transform.position = new Vector3(X * 10, 0, Y * 10);
+
         return obj;
     }
 
+
     public GameObject generateLeft()
     {
-        GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        roomPrefab = GameObject.FindWithTag("Room");
+        GameObject obj = Instantiate(roomPrefab, new Vector3(transform.position.x - 10, 0f, transform.position.y), Quaternion.identity);
         obj.SetActive(true);
         cc.enabled = false;
-        player.transform.position = new Vector3(player.transform.position.x - 10, 1, player.transform.position.z);
+        player.transform.position = obj.transform.position + new Vector3(3f, 0, 0);
         cc.enabled = true;
-        obj.transform.position = new Vector3(transform.position.x - 10, 0, transform.position.z);
+
         return obj;
     }
 
     public GameObject generateRight()
     {
-        GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        roomPrefab = GameObject.FindWithTag("Room");
+        GameObject obj = Instantiate(roomPrefab, new Vector3(transform.position.x + 10, 0f, transform.position.y), Quaternion.identity);
         obj.SetActive(true);
         cc.enabled = false;
-        player.transform.position = new Vector3(player.transform.position.x + 10, 1, player.transform.position.z);
+        player.transform.position = obj.transform.position - new Vector3(3f, 0, 0);
         cc.enabled = true;
-        obj.transform.position = new Vector3(transform.position.x + 10, 0, transform.position.z);
+
         return obj;
     }
 
     public GameObject generateUp()
     {
-        GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        roomPrefab = GameObject.FindWithTag("Room");
+        GameObject obj = Instantiate(roomPrefab, new Vector3(transform.position.x, 0f, transform.position.z + 10), Quaternion.identity);
         obj.SetActive(true);
         cc.enabled = false;
-        player.transform.position = new Vector3(player.transform.position.x, 1, player.transform.position.z + 10);
+        player.transform.position = obj.transform.position - new Vector3(0, 0, 3f);
         cc.enabled = true;
-        obj.transform.position = new Vector3(transform.position.x, 0, transform.position.z + 10);
+
         return obj;
     }
 
     public GameObject generateDown()
     {
-        GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        roomPrefab = GameObject.FindWithTag("Room");
+        GameObject obj = Instantiate(roomPrefab, new Vector3(transform.position.x, 0f, transform.position.y - 10), Quaternion.identity);
         obj.SetActive(true);
         cc.enabled = false;
         player.transform.position = new Vector3(player.transform.position.x, 1, player.transform.position.z - 10);
         cc.enabled = true;
-        obj.transform.position = new Vector3(transform.position.x, 0, transform.position.z - 10);
+
         return obj;
     }
 }

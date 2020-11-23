@@ -21,16 +21,19 @@ public class Player : MonoBehaviour
         // Character controller
         cc = GetComponent<CharacterController>();
         
-        // Regenerate the room
-        GameObject currFloor = GameObject.Find("Room");
+        // Get the room
+        GameObject currFloor = GameObject.FindWithTag("Room");
+
+        // Generate new room
         GameObject obj = currFloor.GetComponent<RoomGenerator>().genAtPos(data.X, data.Y);
         Destroy(currFloor);
-        obj.AddComponent<RoomGenerator>();
+        obj.name = "Room";
         gen = obj.GetComponent<RoomGenerator>();
         gen.player = this;
 
         // Reset position to last position
         transform.position = data.lastPos;
+        
     }
 
     void Update()
@@ -38,7 +41,7 @@ public class Player : MonoBehaviour
         // Get the new generator
         if (gen == null)
         {
-            gen = GameObject.Find("Room").GetComponent<RoomGenerator>();
+            gen = GameObject.FindWithTag("Room").GetComponent<RoomGenerator>();
             gen.player = this;
         }
         

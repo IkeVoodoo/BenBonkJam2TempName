@@ -1,78 +1,91 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using GameJamUtils.GameObjectUtils;
 
 public class GenTest : MonoBehaviour
 {
 
     public Player player;
+    public GameObject roomPrefab;
 
-    public void generate(int pos, bool increment)
+    public void generate(int pos)
     {
-        GameObject currFloor = GameObject.Find("Plane");
+        GameObject currFloor = GameObject.FindWithTag("Room");
         switch (pos)
         {
             case 0:
                 GameObject objRight = currFloor.GetComponent<RoomGenerator>().generateRight();
-                if( increment) player.data.X--;
+                setup(objRight);
                 Destroy(currFloor);
-                objRight.AddComponent<RoomGenerator>();
                 break;
             case 1:
                 GameObject objUp = currFloor.GetComponent<RoomGenerator>().generateUp();
-                if (increment)  player.data.Y++;
+                setup(objUp);
                 Destroy(currFloor);
-                objUp.AddComponent<RoomGenerator>();
                 break;
             case 2:
                 GameObject objLeft = currFloor.GetComponent<RoomGenerator>().generateLeft();
-                if (increment)  player.data.X++;
+                setup(objLeft);
                 Destroy(currFloor);
-                objLeft.AddComponent<RoomGenerator>();
                 break;
             case 3:
                 GameObject objDown = currFloor.GetComponent<RoomGenerator>().generateDown();
-                if (increment) player.data.Y--;
+                setup(objDown);
                 Destroy(currFloor);
-                objDown.AddComponent<RoomGenerator>();
                 break;
         }
     }
-
-    public void generate(int pos)
+    public void generateWithIncrement(int pos)
     {
-        GameObject currFloor = GameObject.Find("Plane");
+
+        GameObject currFloor = GameObject.FindWithTag("Room");
         switch (pos)
         {
             case 0:
                 GameObject objRight = currFloor.GetComponent<RoomGenerator>().generateRight();
                 player.data.X++;
+                setup(objRight);
                 Destroy(currFloor);
-                objRight.AddComponent<RoomGenerator>();
-                objRight.GetComponent<RoomGenerator>().player = player;
                 break;
             case 1:
                 GameObject objUp = currFloor.GetComponent<RoomGenerator>().generateUp();
                 player.data.Y++;
+                setup(objUp);
                 Destroy(currFloor);
-                objUp.AddComponent<RoomGenerator>();
-                objUp.GetComponent<RoomGenerator>().player = player;
                 break;
             case 2:
                 GameObject objLeft = currFloor.GetComponent<RoomGenerator>().generateLeft();
                 player.data.X--;
+                setup(objLeft);
                 Destroy(currFloor);
-                objLeft.AddComponent<RoomGenerator>();
-                objLeft.GetComponent<RoomGenerator>().player = player;
                 break;
             case 3:
                 GameObject objDown = currFloor.GetComponent<RoomGenerator>().generateDown();
                 player.data.Y--;
+                setup(objDown);
                 Destroy(currFloor);
-                objDown.AddComponent<RoomGenerator>();
-                objDown.GetComponent<RoomGenerator>().player = player;
                 break;
         }
+
+        //GetComponent<AudioSource>().Play();
+    }
+
+    private GameObject setup(GameObject obj)
+    {
+        GameObject currFloor = GameObject.FindWithTag("Room");
+        RoomGenerator gen = obj.GetComponent<RoomGenerator>();
+
+        gen.player = player;
+        if(roomPrefab == null) roomPrefab = currFloor;
+        gen.roomPrefab = currFloor;
+        player.gen = gen;
+        obj.name = "Room";
+
+        if (GameObjectUtils.distance(currFloor, player.gameObject) > 10)
+            player.gameObject.transform.position = currFloor.transform.position + new Vector3(0, 1, 0);
+        else if (GameObjectUtils.distance(currFloor, player.gameObject) < -10)
+            player.gameObject.transform.position = currFloor.transform.position + new Vector3(0, 1, 0);
+
+        return obj;
     }
 
 }
